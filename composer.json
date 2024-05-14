@@ -15,6 +15,7 @@
         "laravel/framework": "^11.00",
         "laravel/sanctum": "*",
         "laravel/tinker": "*",
+        "leo/users":"*",
         "mnsami/composer-custom-directory-installer": "*",
         "spatie/laravel-permission": "^6.7",
         "tymon/jwt-auth": "^2.1",
@@ -71,6 +72,9 @@
             "merge-scripts": true
         },
         "installer-paths": {
+            "./plugins/users": [
+                "leo/users"
+             ]
         }
     },
     "config": {
@@ -88,5 +92,9 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "repositories": [
+        {
+            "type": "path",
+            "url": "./packages/users/"
+        }
     ]
 }
