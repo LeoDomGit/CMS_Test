@@ -1,0 +1,17 @@
+{
+    "name": "leo/scores",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Leo\\Scores\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "LeoDomGit",
+            "email": "leodomsolar@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
