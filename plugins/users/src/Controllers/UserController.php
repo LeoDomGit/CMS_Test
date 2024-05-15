@@ -11,6 +11,7 @@ use Leo\Users\Mail\createUser;
 use Leo\Users\Models\User;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Firebase\JWT\JWT;
+use Illuminate\Support\Facades\Auth;
 use Leo\Users\Role;
 
 class UserController 
@@ -18,9 +19,11 @@ class UserController
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function get_scores(Request $request)
     {
-        
+        $idRole = Role::where('name','players')->value('id');
+        $players = User::where('idRole', $idRole)->with('scores')->get();
+        return response()->json($players);
     }
 
     /**
@@ -69,9 +72,37 @@ class UserController
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function checkLogin(Request $request)
     {
-        
+        $validator = Validator::make($request->all(), [
+            'email'=>'required|email',
+            'password'=>'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['check'=>false,'msg'=>$validator->errors()->first()]);
+        }
+        $validator = Validator::make($request->all(), [
+            'email'=>'required|email|exists:users,email',
+            'password'=>'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['check'=>false,'msg'=>$validator->errors()->first()]);
+        }
+        $credentials = $request->only('email', 'password');
+        $idRole=Role::where('name','admin')->value('id');
+        $credentials['idRole']=$idRole;
+        $token = Auth::attempt($credentials);
+        if (!$token) {
+            return response()->json([
+                'check' => 'error',
+                'msg' => 'Unauthorized',
+            ], 401);
+        }
+        $token = JWTAuth::fromUser(Auth::user());
+        return response()->json([
+            'check' => true,
+            'token' => $token,
+        ]);
     }
 
     /**
