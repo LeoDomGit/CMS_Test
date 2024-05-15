@@ -15,13 +15,13 @@ class ScoreExport implements FromCollection, WithHeadings, ShouldAutoSize
         $iphoneUsersCount = ceil($totalUsers * 0.10);
         $voucherUsersCount = ceil($totalUsers * 0.30);
         
-        // Fetch all users with scores
         $users = DB::table('scores')
             ->join('users', 'scores.idUser', '=', 'users.id')
             ->select('users.name', 'users.id')
             ->addSelect(DB::raw('GROUP_CONCAT(scores.score ORDER BY scores.id) AS scores'))
-            ->groupBy('users.id')
+            ->groupBy('users.id','users.name')
             ->get();
+
 
         // Randomly select users for iPhone and Voucher rewards
         $iphoneUsers = DB::table('scores')
