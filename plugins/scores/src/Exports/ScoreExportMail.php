@@ -17,6 +17,7 @@ class ScoreExport implements FromCollection, WithHeadings, ShouldAutoSize
         
         $users = DB::table('scores')
             ->join('users', 'scores.idUser', '=', 'users.id')
+            ->where('scores.score','>=',5)
             ->select('users.name', 'users.id')
             ->addSelect(DB::raw('GROUP_CONCAT(scores.score ORDER BY scores.id) AS scores'))
             ->groupBy('users.id','users.name')
@@ -26,6 +27,7 @@ class ScoreExport implements FromCollection, WithHeadings, ShouldAutoSize
         // Randomly select users for iPhone and Voucher rewards
         $iphoneUsers = DB::table('scores')
             ->join('users', 'scores.idUser', '=', 'users.id')
+            ->where('scores.score','>=',5)
             ->select('users.id')
             ->inRandomOrder()
             ->limit($iphoneUsersCount)
@@ -33,6 +35,7 @@ class ScoreExport implements FromCollection, WithHeadings, ShouldAutoSize
 
         $voucherUsers = DB::table('scores')
             ->join('users', 'scores.idUser', '=', 'users.id')
+            ->where('scores.score','>=',5)
             ->select('users.id')
             ->whereNotIn('users.id', $iphoneUsers->toArray()) 
             ->inRandomOrder()
