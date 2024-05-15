@@ -18,7 +18,7 @@ class ScoreExport implements FromCollection, WithHeadings, ShouldAutoSize
         // Fetch all users with scores
         $users = DB::table('scores')
             ->join('users', 'scores.idUser', '=', 'users.id')
-            ->select('users.name', 'users.*')
+            ->select('users.name', 'users.id')
             ->addSelect(DB::raw('GROUP_CONCAT(scores.score ORDER BY scores.id) AS scores'))
             ->groupBy('users.id')
             ->get();
