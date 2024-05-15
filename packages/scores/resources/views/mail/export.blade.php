@@ -58,7 +58,7 @@
     <div class="email-box">
         <h1>Export Players</h1>
         <ul>
-            <li> Report file link : {{ $data['link'] }}</li>
+            <li> Report file link : <a href="{{ $data['link'] }}">Link download</a></li>
 
         </ul>
     </div>

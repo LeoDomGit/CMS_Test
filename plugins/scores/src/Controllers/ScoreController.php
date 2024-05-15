@@ -4,6 +4,7 @@ namespace Leo\Scores\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Leo\Scores\Scores;
@@ -47,7 +48,7 @@ class ScoreController extends Controller
         if ($validator->fails()) {
             return response()->json(['check'=>false,'msg'=>$validator->errors()->first()]);
         }
-        $fileName = 'scores.xlsx';
+        $fileName = 'scores_' . Carbon::now()->format('Ymd_His') . '.xlsx';;
         Excel::store(new ScoreExport, 'public/excel/' . $fileName);
         $link =  asset(Storage::url('public/excel/' . $fileName));
         $data=[
