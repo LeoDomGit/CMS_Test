@@ -2158,11 +2158,11 @@
         },
         {
             "name": "leo/users",
-            "version": "dev-main",
+            "version": "dev-Users",
             "dist": {
                 "type": "path",
                 "url": "./packages/users",
-                "reference": "832cb9ca61c31408a4e348bcd80b47b9da41c25d"
+                "reference": "8b0f976d0b10b874889105b5814baf4b6a0ee77b"
             },
             "type": "library",
             "extra": {
@@ -2190,7 +2190,8 @@
                 "post-update-cmd": [
                     "@php artisan migrate --path=packages/users/database/migrations/2024_05_14_135851_create_roles_table.php",
                     "@php artisan vendor:publish --provider='Leo\\Users\\Providers\\UserServiceProvider' --tag=migrations",
-                    "@php artisan db:seed --class=Leo\\Users\\Database\\Seeders\\Role_Seeder"
+                    "@php artisan db:seed --class=Leo\\Users\\Database\\Seeders\\Role_Seeder",
+                    "@php artisan db:seed --class=Leo\\Users\\Database\\Seeders\\User_Seeder"
                 ]
             },
             "authors": [

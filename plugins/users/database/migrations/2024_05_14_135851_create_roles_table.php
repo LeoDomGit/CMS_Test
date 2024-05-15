@@ -11,13 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::dropIfExists('roles');
-        Schema::create('roles', function (Blueprint $table) {
-            $table->id();
-            $table->string('name',255);
-            $table->timestamps();
-        });
-
         if (Schema::hasTable('users')) {
             if (Schema::hasColumn('users', 'idRole')) {
                 Schema::table('users', function (Blueprint $table) {
@@ -25,9 +18,21 @@ return new class extends Migration
                     $table->dropColumn('idRole');
                 });
             }
+            if (Schema::hasColumn('users', 'phone')) {
+                Schema::table('users', function (Blueprint $table) {
+                    $table->dropColumn('phone');
+                });
+            }
         }
+        Schema::dropIfExists('roles');
+        Schema::create('roles', function (Blueprint $table) {
+            $table->id();
+            $table->string('name',255);
+            $table->timestamps();
+        });
         Schema::table('users', function (Blueprint $table) {
             $table->unsignedBigInteger('idRole')->nullable()->after('id');
+            $table->string('phone',10)->nullable(true);
             $table->foreign('idRole')->references('id')->on('roles');
         });
     }

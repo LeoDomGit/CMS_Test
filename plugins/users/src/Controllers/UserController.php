@@ -3,6 +3,7 @@
 namespace Leo\Users\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Leo\Users\Models\User;
 
 class UserController 
@@ -20,7 +21,7 @@ class UserController
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -28,7 +29,15 @@ class UserController
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|unique:categories_post,name|max:255',
+            'email'=>'email|unique:users,email',
+            'phone'=>'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['check'=>false,'msg'=>$validator->errors()->first()]);
+        }
+        
     }
 
     /**
