@@ -11,6 +11,7 @@ use Leo\Users\Mail\createUser;
 use Leo\Users\Models\User;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Firebase\JWT\JWT;
+use Leo\Users\Role;
 
 class UserController 
 {
@@ -45,13 +46,15 @@ class UserController
         }else if (!preg_match('/^(84|0[3|5|7|8|9])[0-9]{8}$/', $request->phone)) {
           return response()->json(['check'=>false,'msg'=>'Phone number is invalid']);
         } 
-        $user=User::where('email',$request->emai)->first();
+        $user=User::where('email',$request->email)->first();
         if($user){
             return response()->json(['check'=>true,'data'=>$user->id]);
         }else{
             $password=random_int(1000,9999);
             $data= $request->all();
             $data['password']=Hash::make($password);
+            $idRole=Role::where('name','players')->value('id');
+            $data['idRole']=$idRole;
             $id= User::insertGetId($data);
             $data = [
                 'email' => $request->email,
@@ -59,8 +62,8 @@ class UserController
                 'phone' => $request->phone,
             ];
             Mail::to($data['email'])->send(new createUser($data));
+            return response()->json(['check'=>true,'data'=>$id]);
         }
-        return response()->json(['check'=>true,'data'=>$id]);
     }
 
     /**

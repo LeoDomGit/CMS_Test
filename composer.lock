@@ -2158,7 +2158,7 @@
         },
         {
             "name": "leo/users",
-            "version": "dev-Users",
+            "version": "dev-Score",
             "dist": {
                 "type": "path",
                 "url": "./packages/users",

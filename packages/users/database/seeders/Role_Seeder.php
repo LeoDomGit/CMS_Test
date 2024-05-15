@@ -4,6 +4,7 @@ namespace Leo\Users\Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Leo\Users\Models\User;
 use Leo\Users\Role;
 
 class Role_Seeder extends Seeder
