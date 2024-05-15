@@ -15,29 +15,28 @@ class ScoreExport implements FromCollection, WithHeadings, ShouldAutoSize
         $iphoneUsersCount = ceil($totalUsers * 0.10);
         $voucherUsersCount = ceil($totalUsers * 0.30);
 
-        // Get users with at least one score >= 5
         $users = DB::table('scores')
             ->join('users', 'scores.idUser', '=', 'users.id')
+            ->where('scores.score','>=',5)
             ->select('users.name', 'users.id')
             ->addSelect(DB::raw('GROUP_CONCAT(scores.score ORDER BY scores.id) AS scores'))
             ->groupBy('users.id', 'users.name')
-            ->havingRaw('MAX(scores.score) >= 5')
             ->get();
-
-        // Randomly select users for iPhone and Voucher rewards
         $iphoneUsers = DB::table('scores')
             ->join('users', 'scores.idUser', '=', 'users.id')
+            ->where('scores.score','>=',5)
             ->select('users.id')
-            ->havingRaw('MAX(scores.score) >= 5')
+            ->groupBy('users.id')
             ->inRandomOrder()
             ->limit($iphoneUsersCount)
             ->pluck('id');
 
         $voucherUsers = DB::table('scores')
             ->join('users', 'scores.idUser', '=', 'users.id')
+            ->where('scores.score','>=',5)
             ->select('users.id')
             ->whereNotIn('users.id', $iphoneUsers->toArray())
-            ->havingRaw('MAX(scores.score) >= 5')
+            ->groupBy('users.id')
             ->inRandomOrder()
             ->limit($voucherUsersCount)
             ->pluck('id');
