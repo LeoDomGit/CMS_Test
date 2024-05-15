@@ -23,6 +23,6 @@ class User_Seeder extends Seeder
             'password'=>Hash::make(111),
             'idRole'=>$idRole
         ];
-        User::create($user);
+        User::firstOrCreate($user);
     }
 }
