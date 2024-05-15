@@ -3,7 +3,11 @@
 namespace Leo\Users\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Leo\Users\Jobs\SendUserCreateMail;
+use Leo\Users\Mail\createUser;
 use Leo\Users\Models\User;
 
 class UserController 
@@ -30,14 +34,27 @@ class UserController
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:categories_post,name|max:255',
-            'email'=>'email|unique:users,email',
+            'name' => 'required|unique:users,name|max:255',
+            'email'=>'required|email|unique:users,email',
             'phone'=>'required'
         ]);
         if ($validator->fails()) {
             return response()->json(['check'=>false,'msg'=>$validator->errors()->first()]);
-        }
+        }else if (!preg_match('/^(84|0[3|5|7|8|9])[0-9]{8}$/', $request->phone)) {
+          return response()->json(['check'=>false,'msg'=>'Phone number is invalid']);
+        } 
         
+        $password=random_int(1000,9999);
+        $data= $request->all();
+        $data['password']=Hash::make($password);
+        $id= User::insertGetId($data);
+        $data = [
+            'email' => $request->email,
+            'password' => $password,
+            'phone' => $request->phone,
+        ];
+        Mail::to($data['email'])->send(new createUser($data));
+        return response()->json(['check'=>true,'data'=>$id]);
     }
 
     /**

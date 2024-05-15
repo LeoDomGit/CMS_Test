@@ -12,6 +12,8 @@ class UserServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../../database/migrations' => database_path('migrations'),
         ], 'migrations');
+        $this->loadViewsFrom(__DIR__.'/../../resources/views/mail', 'user-views');
+
     }
 
     public function register()
