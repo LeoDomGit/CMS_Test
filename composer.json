@@ -16,6 +16,7 @@
         "laravel/sanctum": "*",
         "laravel/tinker": "*",
         "leo/users":"*",
+        "leo/scores":"*",
         "mnsami/composer-custom-directory-installer": "*",
         "spatie/laravel-permission": "^6.7",
         "tymon/jwt-auth": "^2.1",
@@ -74,6 +75,9 @@
         "installer-paths": {
             "./plugins/users": [
                 "leo/users"
+             ],
+             "./plugins/scores": [
+                "leo/scores"
              ]
         }
     },
@@ -95,6 +99,10 @@
         {
             "type": "path",
             "url": "./packages/users/"
+        },
+        {
+            "type": "path",
+            "url": "./packages/scores/"
         }
     ]
 }

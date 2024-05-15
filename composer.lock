@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e83e856c9f874a2179effc7c2b965908",
+    "content-hash": "184ea0dec9bad0b96a37c91129d735cb",
     "packages": [
         {
             "name": "abbasudo/laravel-purity",
@@ -2157,8 +2157,56 @@
             "time": "2024-01-28T23:22:08+00:00"
         },
         {
+            "name": "leo/scores",
+            "version": "dev-Scores",
+            "dist": {
+                "type": "path",
+                "url": "./packages/scores",
+                "reference": "9e77c7cd8a108fac2fc06a521f49d712cb9a9091"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Leo\\Scores\\Providers\\ScoresServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Leo\\Scores\\": "src/",
+                    "Leo\\Scores\\Providers\\": "src/Providers/",
+                    "Leo\\Scores\\Database\\Migrations\\": "database/migrations/",
+                    "Leo\\Scores\\Database\\Seeders\\": "database/seeders/"
+                },
+                "classmap": [
+                    "src/Controllers",
+                    "src/Providers",
+                    "src/Models",
+                    "./routes"
+                ]
+            },
+            "scripts": {
+                "post-update-cmd": [
+                    "@php artisan migrate --path=packages/scores/database/migrations/2024_05_15_024505_create_scores_table.php",
+                    "@php artisan vendor:publish --provider='Leo\\Scores\\Providers\\ScoresServiceProvider' --tag=migrations",
+                    "@php artisan db:seed --class=Leo\\Scores\\Database\\Seeders\\UserSeeder",
+                    "@php artisan db:seed --class=Leo\\Scores\\Database\\Seeders\\ScoreSeeder"
+                ]
+            },
+            "authors": [
+                {
+                    "name": "LeoDomGit",
+                    "email": "leodomsolar@gmail.com"
+                }
+            ],
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "leo/users",
-            "version": "dev-Score",
+            "version": "dev-Scores",
             "dist": {
                 "type": "path",
                 "url": "./packages/users",
