@@ -1,0 +1,47 @@
+{
+    "name": "leo/users",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Leo\\Users\\": "src/",
+            "Leo\\Users\\Providers\\":"src/Providers/",
+            "Leo\\Users\\Database\\Migrations\\": "database/migrations/",
+            "Leo\\Users\\Database\\Seeders\\": "database/seeders/"
+        },
+        "classmap": [
+            "src/Controllers",
+            "src/Providers",
+            "src/Models",
+            "./routes"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Leo\\Users\\Providers\\UserServiceProvider"
+            ]
+        }
+    },
+    "scripts": {
+        "post-update-cmd": [
+            "@php artisan migrate --path=packages/users/database/migrations/2024_05_14_135851_create_roles_table.php",
+            "@php artisan vendor:publish --provider='Leo\\Users\\Providers\\UserServiceProvider' --tag=migrations",
+            "@php artisan db:seed --class=Leo\\Users\\Database\\Seeders\\Role_Seeder",
+            "@php artisan db:seed --class=Leo\\Users\\Database\\Seeders\\User_Seeder"
+        ]
+    },
+    "authors": [
+        {
+            "name": "LeoDomGit",
+            "email": "leodomsolar@gmail.com"
+        }
+    ],
+    "require": {},
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
