@@ -2,6 +2,7 @@
 
 namespace Leo\Users\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -12,7 +13,10 @@ use Leo\Users\Models\User;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Auth;
+use Leo\Users\Exports\UserExport;
+use Leo\Users\Mail\sendMailExport;
 use Leo\Users\Role;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController 
 {
@@ -24,6 +28,35 @@ class UserController
         $idRole = Role::where('name','players')->value('id');
         $players = User::where('idRole', $idRole)->with('scores')->get();
         return response()->json($players);
+    }
+
+    public function export_link (){
+        return Excel::download(new UserExport, 'users.xlsx');
+    }
+    
+    public function export_mail (Request $request){
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['check'=>false,'msg'=>$validator->errors()->first()]);
+        }
+        $fileName = 'users_' . Carbon::now()->format('Ymd_His') . '.xlsx';
+        $filePath = 'public/excel/' . $fileName;
+        Excel::store(new UserExport, $filePath);
+    
+        $fileFullPath = storage_path('app/' . $filePath);
+    
+        $data = [
+            'email' => $request->email,
+            'file' => $fileFullPath
+        ];
+    
+        Mail::to($data['email'])->send(new sendMailExport($data));
+        if (file_exists($fileFullPath)) {
+            unlink($fileFullPath);
+        }
+        return response()->json(['check'=>true]);
     }
 
     /**
