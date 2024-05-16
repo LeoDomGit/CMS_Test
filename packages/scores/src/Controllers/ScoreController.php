@@ -48,13 +48,17 @@ class ScoreController extends Controller
         if ($validator->fails()) {
             return response()->json(['check'=>false,'msg'=>$validator->errors()->first()]);
         }
-        $fileName = 'scores_' . Carbon::now()->format('Ymd_His') . '.xlsx';;
-        Excel::store(new ScoreExport, 'public/excel/' . $fileName);
-        $link =  asset(Storage::url('public/excel/' . $fileName));
-        $data=[
-            'email'=>$request->email,
-            'link'=> $link
+        $fileName = 'scores_' . Carbon::now()->format('Ymd_His') . '.xlsx';
+        $filePath = 'public/excel/' . $fileName;
+        Excel::store(new ScoreExport, $filePath);
+    
+        $fileFullPath = storage_path('app/' . $filePath);
+    
+        $data = [
+            'email' => $request->email,
+            'file' => $fileFullPath
         ];
+    
         Mail::to($data['email'])->send(new sendMailExport($data));
         return response()->json(['check'=>true]);
     }

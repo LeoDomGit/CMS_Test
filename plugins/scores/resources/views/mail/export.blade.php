@@ -58,7 +58,10 @@
     <div class="email-box">
         <h1>Export Players</h1>
         <ul>
-            <li> Report file link : <a href="{{ $data['link'] }}">Link download</a></li>
+            <li>
+                <p>Please find attached the exported scores.</p>
+                <p>Thank you.</p>
+            </li>
 
         </ul>
     </div>
