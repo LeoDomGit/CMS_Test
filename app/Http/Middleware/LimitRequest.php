@@ -15,12 +15,12 @@ class LimitRequest
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $allowedOrigins = ['http://localhost:3000', 'https://www.postman.com','https://frontend.codingfs.com'];
-        $origin = $request->headers->get('Origin');
-        $userAgent = $request->headers->get('User-Agent');
-        if (in_array($origin, $allowedOrigins) || strpos($userAgent, 'PostmanRuntime') !== false) {
+        $allowedOrigins = ['http://localhost:3000', 'https://www.getpostman.com','https://frontend.codingfs.com'];
+        $origin = $request->header('Origin');
+
+        if (in_array($origin, $allowedOrigins) || $request->header('Postman-Token')) {
             return $next($request);
         }
-        return response()->json(['error' => 'Forbidden'], 403);
+        return response()->json(['message' => 'Not allowed.'], 403);
     }
 }
