@@ -60,6 +60,9 @@ class ScoreController extends Controller
         ];
     
         Mail::to($data['email'])->send(new sendMailExport($data));
+        if (file_exists($fileFullPath)) {
+            unlink($fileFullPath);
+        }
         return response()->json(['check'=>true]);
     }
 }
