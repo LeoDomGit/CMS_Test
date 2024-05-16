@@ -39,7 +39,11 @@ class sendMailExport extends Mailable
     public function build()
     {
         return $this->view('export-views::export')
-                    ->with(['data' => $this->data]);
+                    ->subject('Your Exported Scores')
+                    ->attach($this->data['file'], [
+                        'as' => 'scores.xlsx',
+                        'mime' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    ]);
     }
 
     /**
