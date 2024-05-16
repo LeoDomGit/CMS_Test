@@ -15,7 +15,7 @@ class LimitRequest
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $allowedOrigins = ['http://localhost:3000', 'https://www.getpostman.com','https://https://frontend.codingfs.com'];
+        $allowedOrigins = ['http://localhost:3000', 'https://www.getpostman.com','https://frontend.codingfs.com'];
         $origin = $request->header('Origin');
 
         if (in_array($origin, $allowedOrigins) || $request->header('Postman-Token')) {
